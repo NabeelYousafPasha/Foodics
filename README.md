@@ -23,7 +23,7 @@ stock of each of the ingredients so it reflects the amounts consumed.
 Also when any of the ingredients stock level reaches 50%, the system should send an 
 email message to alert the merchant they need to buy more of this ingredient. 
 
-###Requirements:
+### Requirements:
 
 <b>First</b>, Write a controller action that:
 
