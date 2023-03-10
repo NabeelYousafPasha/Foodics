@@ -48,3 +48,11 @@ The incoming `payload` may look like this:
     ]
 }
 ```
+<hr>
+
+## My Proposed Solution
+
+
+### ERD
+
+![https://github.com/NabeelYousafPasha/Foodics](./Foodics-ERD-10-03-2023.png?raw=true "https://github.com/NabeelYousafPasha/Foodics")
