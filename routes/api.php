@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\OrderController;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -64,6 +65,19 @@ Route::group([
         |--------------------------------------------------------------------------
         */
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | api.orders.
+        |--------------------------------------------------------------------------
+        */
+        Route::group([
+            'prefix' => '/orders',
+            'as' => 'orders.'
+        ], function () {
+            Route::post('/', [OrderController::class, 'store'])->name('store');
+        });
     });
 });
 
