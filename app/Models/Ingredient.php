@@ -18,6 +18,8 @@ class Ingredient extends Model
         'available_quantity',
         'danger_value',
         'danger_value_unit',
+        'last_stock_renewed_at',
+        'last_danger_notified_at',
     ];
 
     protected $casts = [
