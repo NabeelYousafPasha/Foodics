@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\AuthController;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,55 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// api/ping
+Route::get('/ping', function() {
+    return response()->json([
+        'pong',
+    ], Response::HTTP_OK);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Route Prefix = api/v1/
+| Route Name = api.
+|--------------------------------------------------------------------------
+*/
+Route::group([
+    'prefix' => 'v1',
+    'as' => 'api.',
+], function() {
+
+    /*
+    |--------------------------------------------------------------------------
+    | api.register
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+    /*
+    |--------------------------------------------------------------------------
+    | api.login
+    |--------------------------------------------------------------------------
+    */
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+    Route::group([
+        'middleware' => ['auth:sanctum',],
+    ], function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | api.me
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/me', [AuthController::class, 'me'])->name('me');
+
+        /*
+        |--------------------------------------------------------------------------
+        | api.logout
+        |--------------------------------------------------------------------------
+        */
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    });
+});
+
