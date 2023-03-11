@@ -72,4 +72,31 @@ class AuthController extends Controller
         );
     }
 
+    /**
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        auth()->user()->tokens()->delete();
+
+        return $this->successResponse(
+            message: 'User Tokens Revoked Successfully',
+            data: [],
+            responseCode: Response::HTTP_NO_CONTENT
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function me(Request $request): JsonResponse
+    {
+        return $this->successResponse(
+            message: 'Auth User',
+            data: [
+                'user' => $request->user(),
+            ],
+        );
+    }
 }
