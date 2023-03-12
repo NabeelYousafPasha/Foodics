@@ -23,22 +23,22 @@ class IngredientSeeder extends Seeder
                 'base_quantity' => '20',
                 'standard_unit_id' => $SIgram->id,
                 'available_quantity' => '20',
-                'danger_value' => '50',
-                'danger_level_unit' => '%',
+                'threshold_level' => '50',
+                'threshold_unit' => '%',
             ],
             'cheese' => [
                 'base_quantity' => '5',
                 'standard_unit_id' => $SIgram->id,
                 'available_quantity' => '5',
-                'danger_value' => '50',
-                'danger_level_unit' => '%',
+                'threshold_level' => '50',
+                'threshold_unit' => '%',
             ],
             'onion' => [
                 'base_quantity' => '1',
                 'standard_unit_id' => $SIgram->id,
                 'available_quantity' => '1',
-                'danger_value' => '50',
-                'danger_level_unit' => '%',
+                'threshold_level' => '50',
+                'threshold_unit' => '%',
             ],
         ];
 
