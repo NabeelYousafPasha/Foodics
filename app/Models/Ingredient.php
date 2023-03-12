@@ -50,12 +50,25 @@ class Ingredient extends Model
     }
 
     /**
+     * We will always reset this to NULL whenever new stock of ingredients are added
+     * and it updates available_quantity to be more than threshold_level/unit (for example 50%)
+     * so that NULL means we need to notify again next time, whenever stock gets equal or below threshold
+     *
      *
      * @return bool
      */
     public function hasThresholdAlreadyNotified()
     {
         return ! is_null($this->last_threshold_notified_at);
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function hasStockRenewedAfterLastNotified()
+    {
+        return $this->last_stock_renewed_at >= $this->last_threshold_notified_at;
     }
 
 
