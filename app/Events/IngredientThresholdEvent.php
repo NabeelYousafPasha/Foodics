@@ -15,7 +15,7 @@ class IngredientThresholdEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $ingredient;
+    public $ingredient;
 
     /**
      * Create a new event instance.

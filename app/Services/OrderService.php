@@ -119,14 +119,17 @@ class OrderService
     {
         foreach ($orderIngredientDetails as $ingredientData) {
 
-            $ingredient = Ingredient::find($ingredientData['ingredient_id'])->first();
+            $ingredient = Ingredient::find($ingredientData['ingredient_id']);
 
             $ingredient->update([
                 'available_quantity' => $ingredientData['balance_available_quantity'],
             ]);
 
+            $ingredient->refresh();
+
             if ($ingredientData['has_threshold_achieved'] ?? false) {
 
+                // listen to the event IngredientThresholdEvent
                 event(new IngredientThresholdEvent($ingredient));
             }
         }
