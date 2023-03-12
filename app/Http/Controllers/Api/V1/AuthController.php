@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    use ApiResponse;
-
     /**
      * @param Request $request
      *
