@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Events\OrderPlacedEvent;
-use App\Exceptions\IngredientOutOfStockException;
-use App\Exceptions\ProductQuantityExceedsIngredientStockException;
+use App\Exceptions\{
+    IngredientOutOfStockException,
+    ProductQuantityExceedsIngredientStockException,
+};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Order\OrderRequest;
-use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +42,8 @@ class OrderController extends Controller
 
             $order = $this->orderService->createPendingOrder($orderDetails, $request->user());
 
-             event(new OrderPlacedEvent($order));
+            // just for future, if we want to do anything as order is placed
+            // event(new OrderPlacedEvent($order));
 
             return $this->successResponse(
                 message: 'Order Placed Successfully',
