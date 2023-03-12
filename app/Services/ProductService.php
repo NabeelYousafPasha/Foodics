@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\ProductQuantityExceedsIngredientStockException;
 use App\Models\Ingredient;
 use Illuminate\Support\Facades\Log;
 
@@ -73,6 +74,10 @@ class ProductService
         $this->quantity = $quantity;
     }
 
+    /**
+     * @return array
+     * @throws \App\Exceptions\IngredientOutOfStockException
+     */
     public function handleAvailabilityOfProductQuantity()
     {
         $productIngredients = Ingredient::query()
@@ -94,6 +99,8 @@ class ProductService
         $this->ingredientService->setProductIngredients($productIngredients);
         $this->ingredientService->setProductQuantity($this->getQuantity());
 
-        $this->ingredientService->calculate();
+        $productIngredientDetails = $this->ingredientService->calculate();
+
+        return $productIngredientDetails;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\IngredientOutOfStockException;
 use Illuminate\Support\Facades\Log;
 
 class IngredientService
@@ -61,18 +62,28 @@ class IngredientService
     }
 
 
+    /**
+     * @throws IngredientOutOfStockException
+     */
     public function calculate()
     {
+        $productIngredientDetails = [];
+
         foreach ($this->getProductIngredients() as $productIngredient) {
 
             $this->setIngredient($productIngredient);
 
-            $this->calculateIngredientUnit();
+            $productIngredientDetails[$productIngredient->id] = $this->calculateIngredientUnit();
         }
+
+        return $productIngredientDetails;
     }
 
-    // @IMPORTANT for this I'm using hardcoded values,
-    // otherwise we could use Standard International Unit "conversions dynamically"
+    // @IMPORTANT we could use Standard International Unit "conversions dynamically"
+    /**
+     * @return array
+     * @throws IngredientOutOfStockException
+     */
     public function calculateIngredientUnit()
     {
         $ingredientBaseUnit = 'kg';
@@ -88,6 +99,12 @@ class IngredientService
         $ingredientBalanceQuantity = $ingredient->available_quantity - ($productIngredientQuantity / 1000);
         Log::info("$ingredient->code - balance quantity = $ingredientBalanceQuantity $ingredientBaseUnit");
 
+        if ($ingredientBalanceQuantity <= 0) {
+            Log::info("========= IngredientOutOfStockException: ingredient $ingredient->code will get out of stock to process this order =========");
+
+            throw new IngredientOutOfStockException("ingredient $ingredient->code will get out of stock to process this order");
+        }
+
         $ingredient->available_quantity = $ingredientBalanceQuantity;
 
         Log::info("========= check threshold and if already notified =========");
@@ -95,13 +112,21 @@ class IngredientService
         $ingredientThresholdCalculatedValue = $ingredient->calculateThresholdValue();
         Log::info("$ingredient->code - calculated threshold value = $ingredientThresholdCalculatedValue $ingredientBaseUnit");
 
+        $ingredientDetails = [
+            'ingredient_id' => $ingredient->id,
+            'balance_available_quantity' => $ingredientBalanceQuantity,
+        ];
+
         if ($ingredient->hasIngredientThresholdLevelAchieved()
             &&
             ! $ingredient->hasThresholdAlreadyNotified()
         ) {
             Log::info("$ingredient->code - !! DANGER !! alert we will notify as threshold value is achieved");
 
+            $ingredientDetails['has_threshold_achieved'] = true;
 
         }
+
+        return $ingredientDetails;
     }
 }

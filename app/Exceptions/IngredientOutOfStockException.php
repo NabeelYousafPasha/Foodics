@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductQuantityExceedsIngredientStockException extends Exception
+class IngredientOutOfStockException extends Exception
 {
     use ApiResponse;
 
@@ -22,7 +22,7 @@ class ProductQuantityExceedsIngredientStockException extends Exception
      */
     public function report()
     {
-        Log::debug('Quantity of Product(s) exceeds currently available ingredients');
+        Log::debug('order will make ---Ingredient--- out of stock');
     }
 
     /**
@@ -36,11 +36,11 @@ class ProductQuantityExceedsIngredientStockException extends Exception
     {
         if ($request->wantsJson()) {
             return $this->errorResponse(
-                message: 'Quantity of Product(s) exceeds currently available ingredients',
+                message: 'order will make ---Ingredient--- out of stock',
                 responseCode: Response::HTTP_UNPROCESSABLE_ENTITY,
             );
         }
 
-        return response('Quantity of Product(s) exceeds currently available ingredients');
+        return response('order will make ---Ingredient--- out of stock');
     }
 }

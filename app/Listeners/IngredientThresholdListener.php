@@ -2,11 +2,10 @@
 
 namespace App\Listeners;
 
-use App\Events\OrderPlacedEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class OrderPlacedListener
+class IngredientThresholdListener
 {
     /**
      * Create the event listener.
@@ -24,8 +23,10 @@ class OrderPlacedListener
      * @param  object  $event
      * @return void
      */
-    public function handle(OrderPlacedEvent $event)
+    public function handle($event)
     {
-        // here we can perform any action to log or notify
+        // here we will notify about threshold of ingredient, if email is sent we will skip
+        // until stock of ingredient resets the "available_quantity" column above
+        // 50% (or whatever is the criteria) 
     }
 }

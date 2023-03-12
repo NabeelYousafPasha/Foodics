@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Events\OrderPlacedEvent;
+use App\Exceptions\IngredientOutOfStockException;
 use App\Exceptions\ProductQuantityExceedsIngredientStockException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Order\OrderRequest;
@@ -36,10 +37,11 @@ class OrderController extends Controller
         try {
             $this->orderService->setOrder($request->input('products'));
 
-            $this->orderService->handleIfProcessableOrder();
+            $orderDetails = $this->orderService->handleIfProcessableOrder();
 
+            $orderDetails = $this->orderService->createPendingOrder($orderDetails, $request->user());
 
-            // event(new OrderPlacedEvent());
+             event(new OrderPlacedEvent());
 
             return $this->successResponse(
                 message: 'Order Placed Successfully',
@@ -52,13 +54,21 @@ class OrderController extends Controller
         } catch (ProductQuantityExceedsIngredientStockException $productQuantityExceedsIngredientStockException) {
 
             return $this->errorResponse(
-                message: "Order could not be placed due to: {$productQuantityExceedsIngredientStockException->getMessage()}",
+                message: "Product Quantity Exceeded Stock: {$productQuantityExceedsIngredientStockException->getMessage()}",
                 responseCode: Response::HTTP_UNPROCESSABLE_ENTITY,
                 data: [
-                    'order' => Order::first(),
+                    $request->all(),
                 ]
             );
+        } catch (IngredientOutOfStockException $ingredientOutOfStockException) {
 
+            return $this->errorResponse(
+                message: "Ingredients Out of Stock: {$ingredientOutOfStockException->getMessage()}",
+                responseCode: Response::HTTP_UNPROCESSABLE_ENTITY,
+                data: [
+                    $request->all(),
+                ]
+            );
         } catch (\Exception $exception) {
 
             return $this->errorResponse(

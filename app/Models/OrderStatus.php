@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasCodeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderStatus extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCodeTrait;
 
     const PENDING = 'pending';
     const IN_PROGRESS = 'in-progress';
