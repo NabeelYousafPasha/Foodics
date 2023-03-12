@@ -55,4 +55,12 @@ The incoming `payload` may look like this:
 
 ### ERD
 
+It could be encanced more, but instead of over engineering, that's it for challanging test. Moreover ERD has been updated and danger_level column from ingredients has been updated to threshold_level. 
+
 ![https://github.com/NabeelYousafPasha/Foodics](./Foodics-ERD-10-03-2023.png?raw=true "https://github.com/NabeelYousafPasha/Foodics")
+
+### Tests
+
+`php artisan test --filter OrderTest`
+
+![https://github.com/NabeelYousafPasha/Foodics](./Tests.png?raw=true "https://github.com/NabeelYousafPasha/Foodics")

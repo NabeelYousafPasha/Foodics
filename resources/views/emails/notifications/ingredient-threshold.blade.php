@@ -1,11 +1,7 @@
 <x-mail::message>
-# Introduction
+# Ingredient Threshold Level exceeded
 
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+The Ingredient {{ $ingredient->code }} has reached / exceeded Threshold Level which was {{ round($ingredient->threshold_level) }} {{ $ingredient->threshold_level_unit }}
 
 Thanks,<br>
 {{ config('app.name') }}
