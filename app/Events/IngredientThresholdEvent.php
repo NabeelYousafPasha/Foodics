@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Ingredient;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,14 +15,16 @@ class IngredientThresholdEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    protected $ingredient;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Ingredient $ingredient)
     {
-        //
+        $this->ingredient = $ingredient;
     }
 
     /**

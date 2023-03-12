@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasCodeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderStatus extends Model
 {
@@ -38,5 +39,19 @@ class OrderStatus extends Model
             self::DISPATCHED,
             self::CANCELLED,
         ];
+    }
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | RELATIONSHIPS
+     * |--------------------------------------------------------------------------
+     */
+
+    /**
+     * @return HasMany
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }

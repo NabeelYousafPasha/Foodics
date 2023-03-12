@@ -83,7 +83,13 @@ class OrderService
         return $orderDetails;
     }
 
-    public function createPendingOrder($orderDetails, $customer)
+    /**
+     * @param $orderDetails
+     * @param $customer
+     *
+     * @return Order
+     */
+    public function createPendingOrder($orderDetails, $customer): Order
     {
         $order = Order::create([
             'user_id' => $customer->id,
@@ -99,23 +105,28 @@ class OrderService
                 'quantity' => $detail['quantity'],
             ]);
 
+            // it'll update left quantity/stock of ingredients and listen to the event IngredientThresholdEvent
             $this->updateIngredientStocks($detail['ingredient_details']);
         }
+
+        return $order;
     }
 
     /**
-     * @param $orderIgredientDetails
+     * @param $orderIngredientDetails
      */
-    public function updateIngredientStocks($orderIgredientDetails)
+    public function updateIngredientStocks($orderIngredientDetails)
     {
-        foreach ($orderIgredientDetails as $ingredient) {
-            $ingredient = Ingredient::find($ingredient['ingredient_id'])->first();
+        foreach ($orderIngredientDetails as $ingredientData) {
+
+            $ingredient = Ingredient::find($ingredientData['ingredient_id'])->first();
 
             $ingredient->update([
-                'available_quantity' => $ingredient['balance_available_quantity'],
+                'available_quantity' => $ingredientData['balance_available_quantity'],
             ]);
 
-            if ($ingredient['has_threshold_achieved'] ?? false) {
+            if ($ingredientData['has_threshold_achieved'] ?? false) {
+
                 event(new IngredientThresholdEvent($ingredient));
             }
         }

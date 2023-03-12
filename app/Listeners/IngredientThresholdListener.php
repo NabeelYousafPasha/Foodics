@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\IngredientThresholdEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -20,13 +21,12 @@ class IngredientThresholdListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
-     * @return void
+     * @param IngredientThresholdEvent $ingredientThresholdEvent
      */
-    public function handle($event)
+    public function handle(IngredientThresholdEvent $ingredientThresholdEvent)
     {
         // here we will notify about threshold of ingredient, if email is sent we will skip
         // until stock of ingredient resets the "available_quantity" column above
-        // 50% (or whatever is the criteria) 
+        // 50% (or whatever is the criteria)
     }
 }

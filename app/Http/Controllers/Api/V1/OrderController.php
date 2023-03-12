@@ -39,14 +39,14 @@ class OrderController extends Controller
 
             $orderDetails = $this->orderService->handleIfProcessableOrder();
 
-            $orderDetails = $this->orderService->createPendingOrder($orderDetails, $request->user());
+            $order = $this->orderService->createPendingOrder($orderDetails, $request->user());
 
-             event(new OrderPlacedEvent());
+             event(new OrderPlacedEvent($order));
 
             return $this->successResponse(
                 message: 'Order Placed Successfully',
                 data: [
-                    'order' => Order::first(),
+                    'order' => $order,
                 ],
                 responseCode: Response::HTTP_CREATED
             );
@@ -78,7 +78,6 @@ class OrderController extends Controller
                     'error' => $exception->getMessage(),
                 ]
             );
-
         }
     }
 }

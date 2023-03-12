@@ -6,6 +6,7 @@ use App\Traits\HasCodeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Ingredient extends Model
 {
@@ -56,6 +57,29 @@ class Ingredient extends Model
     {
         return ! is_null($this->last_threshold_notified_at);
     }
+
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | RELATIONSHIPS
+     * |--------------------------------------------------------------------------
+     */
+
+    /**
+     * @return BelongsToMany
+     */
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_ingredients', 'ingredient_id', 'product_id')
+            ->withPivot('ingredient_quantity', 'standard_unit_id');
+    }
+
+
+    /**
+     * |--------------------------------------------------------------------------
+     * | SCOPES
+     * |--------------------------------------------------------------------------
+     */
 
     /**
      * @param Builder $query
